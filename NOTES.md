@@ -82,13 +82,22 @@ spark, and instant readability. Every other candidate either failed
 criterion 1 (v5, v6, v7, v8), lost on specificity (v3, v4), or lost the
 byte tie-break to the identical glyph (v1).
 
-## Validation (2026-11-24, re-validated after adding the read-back assert)
+## Validation (2026-11-24, reviser run 13:25 UTC / 20:25 WIB — after
+extracting write_output() helper + read-back verify and expanding the
+module docstring; entry text untouched)
 
-- `python3 main.py` run twice → /output/entry.txt byte-identical both times
-  (sha256 `3f319b797ed540b8d0cf424721cbbce58509ea1277c8cffe6b7870e17670bb92`).
-- main.py reads back /output/entry.txt after writing and asserts it equals
-  the intended bytes (fail loudly, never submit a bad entry).
-- Grader simulation: repo copied to a temp dir, mounted read-only,
+- Baseline before edits: `python3 main.py` → exit 0, /output/entry.txt
+  md5 `059c00889bb8dde50950864e22c6f371`, sha256
+  `3f319b797ed540b8d0cf424721cbbce58509ea1277c8cffe6b7870e17670bb92`, 4 bytes.
+- After edits: `python3 main.py` run twice → exit 0 both times,
+  /output/entry.txt byte-identical both times, md5
+  `059c00889bb8dde50950864e22c6f371` UNCHANGED from baseline, sha256
+  `3f319b797ed540b8d0cf424721cbbce58509ea1277c8cffe6b7870e17670bb92`.
+- main.py now routes all writes through write_output(): writes
+  /output/entry.txt first, reads it back and asserts byte equality,
+  then writes the byte-identical repo-root copy inside try/except
+  (OSError swallowed — the grader mounts the repo read-only).
+- Grader simulation: repo copied to a temp dir, made read-only,
   `python3 main.py` → exit 0, /output/entry.txt byte-identical to
   repo-root entry.txt.
 - Gate check: entry is 1 character, 4 bytes UTF-8, exactly one emoji
