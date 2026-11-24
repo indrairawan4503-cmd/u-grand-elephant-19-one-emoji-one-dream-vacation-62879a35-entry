@@ -26,6 +26,8 @@ Deterministic: no network, no randomness, no input, no environment.
 
 import os
 
+# Tie-break: a single codepoint, 4 bytes — wins exact rate ties over the
+# 7-byte VS16 form of the same glyph (fewer bytes wins, then earlier receipt).
 # U+1F3DD DESERT ISLAND - 1 character, 4 bytes UTF-8, no trailing newline.
 # No VS16: U+1F3DD has Emoji_Presentation=Yes, so it renders as an emoji
 # on every modern platform without it, and the tie-break rewards fewer bytes.
